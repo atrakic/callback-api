@@ -4,14 +4,14 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main", "master"]
-  
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
-  contents: read
   pages: write
   id-token: write
+  contents: write  # 'write' access to repository contents
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
@@ -25,11 +25,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build the site
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install Dependencies
+        run: pip install -r ./requirements.txt
+
+      - name: Build hardcoded json config for the swagger site
         run: |
-          echo "Building the site..."
-          # mkdir -p _site
-          #echo '<h1>Hello, world!</h1>' > _site/index.html
+          python3 build.py -f ./openapi/callbacks.yaml
+
+      - name: Commit files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add . --force || true
+          git commit -am "Add changes" || true
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
