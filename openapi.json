@@ -5,6 +5,16 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/ping": {
+      "get": {
+        "operationId": "pingGet",
+        "responses": {
+          "201": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/streams": {
       "post": {
         "description": "subscribes a client to receive out-of-band data",
@@ -17,7 +27,7 @@
             "schema": {
               "type": "string",
               "format": "uri",
-              "example": "https://api.callbacks.io"
+              "example": "https://atrakic.github.io/callback-api"
             }
           }
         ],
