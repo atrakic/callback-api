@@ -1,4 +1,4 @@
-name: Publish site
+name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -11,7 +11,7 @@ on:
 permissions:
   pages: write
   id-token: write
-  contents: write           # 'write' access to repository contents
+  contents: write  # 'write' access to repository contents
 
 jobs:
   build:
