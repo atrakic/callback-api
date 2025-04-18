@@ -4,6 +4,25 @@ services:
     container_name: swaggerui
     environment:
       - EMBEDDING=true
-      - SWAGGER_JSON_URL=https://raw.githubusercontent.com/atrakic/callback-api/refs/heads/main/openapi.json
+      - SWAGGER_JSON=/appdata/openapi.json
     ports:
       - 8080:8080
+    depends_on:
+      - builder
+    volumes:
+      - shared-data:/appdata
+  builder:
+    image: python:3
+    container_name: builder
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /src
+    volumes:
+      - ${PWD}:/src
+      - shared-data:/shared-data
+    command: >
+      /bin/bash -c "pip install -r requirements.txt &&
+        python3 ./scripts/build.py -f ./openapi.yaml &&
+        cp -f openapi.json /shared-data/openapi.json"
+volumes:
+  shared-data:

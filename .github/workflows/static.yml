@@ -24,37 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: 'pip' # caching pip dependencies
-
-      - name: Install Dependencies
-        run: pip install -r ./requirements.txt
-
-      - name: Build hardcoded json config for the swagger site
-        run: |
-          python3 build.py -f ./openapi/callbacks.yaml
-
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add . --force || true
-          git commit -am "Add changes" || true
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site/
-
   deploy:
     environment:
       name: github-pages
@@ -63,5 +36,4 @@ jobs:
     needs: build
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4

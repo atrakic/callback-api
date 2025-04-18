@@ -7,7 +7,7 @@ def main():
     )
     parser.add_argument("-f", "--file")
     args = parser.parse_args()
-    
+
     with open(args.file) as file:
         outfile = 'openapi.json'
         with open(outfile, 'w') as out:

@@ -1,15 +1,26 @@
 openapi: 3.0.0
 info:
   title: Callback API
-  version: 1.0.0
+  version: 1.0.0-SNAPSHOT
+  description: Demo spec for documenting openapi functionality
 paths:
-  /ping:
+  /healthcheck:
     get:
-      operationId: pingGet
+      description: |
+        This endpoint is used to check the health of the API. It should return
+        a 200 OK response if the API is up and running.
       responses:
-        '201':
-          description: OK
-  /streams:
+        '200':
+          description: API is up and running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+  /v1/callbacks:
     post:
       description: subscribes a client to receive out-of-band data
       parameters:
@@ -22,7 +33,7 @@ paths:
           schema:
             type: string
             format: uri
-            example: https://atrakic.github.io/callback-api
+            example: http://server/foo/bar
       responses:
         '201':
           description: subscription successfully created
@@ -72,7 +83,6 @@ paths:
                     in further updates
           '{$request.query.callbackUrl}/test': {}
         dummy: {}
-
 components:
   schemas:
     NewNotificationData:
