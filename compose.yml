@@ -12,7 +12,7 @@ services:
     volumes:
       - shared-data:/appdata
   builder:
-    image: python:3
+    image: python:3-alpine
     container_name: builder
     environment:
       - PYTHONUNBUFFERED=1
@@ -21,8 +21,8 @@ services:
       - ${PWD}:/src
       - shared-data:/shared-data
     command: >
-      /bin/bash -c "pip install -r requirements.txt &&
+      /bin/sh -c "pip install -r requirements.txt &&
         python3 ./scripts/build.py -f ./openapi.yaml &&
-        cp -f openapi.json /shared-data/openapi.json"
+        cp -f openapi.json /shared-data/openapi.json && tail -f /dev/null"
 volumes:
   shared-data:
