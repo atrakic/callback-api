@@ -1,0 +1,25 @@
+services:
+  swaggerui:
+    image: docker.swagger.io/swaggerapi/swagger-ui
+    container_name: swaggerui
+    environment:
+      - EMBEDDING=true
+      - SWAGGER_JSON=/app/openapi.json
+    volumes:
+      - ${PWD}:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - builder
+
+  builder:
+    image: python:3
+    container_name: builder
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /src
+    volumes:
+      - ${PWD}:/src:rw
+    command: >
+      /bin/bash -c "pip install -r requirements.txt &&
+        python3 build.py -f ./openapi/callbacks.yaml"
