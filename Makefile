@@ -1,5 +1,8 @@
+
+OPTIONS ?= --build --remove-orphans --force-recreate
+
 all:
-	docker-compose up -d
+	docker-compose up $(OPTIONS) -d
 
 clean:
 	docker-compose down --remove-orphans -v --rmi local

@@ -3,14 +3,14 @@ services:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggerui
     environment:
-      - EMBEDDING=true
       - SWAGGER_JSON=/appdata/openapi.json
     ports:
       - 8080:8080
-    depends_on:
-      - builder
     volumes:
       - shared-data:/appdata
+    depends_on:
+      builder:
+        condition: service_completed_successfully
   builder:
     image: python:3-alpine
     container_name: builder
@@ -23,6 +23,6 @@ services:
     command: >
       /bin/sh -c "pip install -r requirements.txt &&
         python3 ./scripts/build.py -f ./openapi.yaml &&
-        cp -f openapi.json /shared-data/openapi.json && tail -f /dev/null"
+        mv -f openapi.json /shared-data"
 volumes:
   shared-data:
