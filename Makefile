@@ -1,7 +1,7 @@
 
 OPTIONS ?= --build --remove-orphans --force-recreate
 
-all: generator
+all:
 	docker-compose up $(OPTIONS) -d
 
 generator:
