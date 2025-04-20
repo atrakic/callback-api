@@ -1,8 +1,17 @@
 services:
+  api:
+    build: ./src/api
+    container_name: api
+    ports:
+      - 8000:8080
+    depends_on:
+      builder:
+        condition: service_started
   swaggerui:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggerui
     environment:
+      #- CORS=true
       - SWAGGER_JSON=/appdata/openapi.json
     ports:
       - 8080:8080

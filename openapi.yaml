@@ -1,11 +1,11 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
   title: Callback API
   version: 1.0.0-SNAPSHOT
   description: Demo spec for documenting openapi functionality
 servers:
-- url: "http://api:5000/v1"
-- url: "https://api.atrakic.dev/v1"
+  - url: "http://api:8080/v1"
+  - url: "https://api.atrakic.dev/v1"
 paths:
   /healthcheck:
     get:
