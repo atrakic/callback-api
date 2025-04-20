@@ -1,25 +1,29 @@
 services:
-  api:
-    build: ./src/api
-    container_name: api
+  mock:
+    image: stoplight/prism:4
+    container_name: mock
+    command: mock -h 0.0.0.0 /tmp/openapi.yaml
+    #command: proxy -v debug -h 0.0.0.0 /tmp/openapi.yaml http://localhost:3000/ --errors
+    volumes:
+      - ${PWD}/openapi.yaml:/tmp/openapi.yaml
     ports:
-      - 8000:8080
+      # Serve the mocked API locally as available on port 3000
+      - '3000:4010'
     depends_on:
       builder:
-        condition: service_started
+        condition: service_completed_successfully
   swaggerui:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggerui
     environment:
-      #- CORS=true
       - SWAGGER_JSON=/appdata/openapi.json
     ports:
       - 8080:8080
     volumes:
       - shared-data:/appdata
     depends_on:
-      builder:
-        condition: service_completed_successfully
+      mock:
+        condition: service_started
   builder:
     image: python:3-alpine
     container_name: builder

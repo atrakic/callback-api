@@ -1,2 +1,1 @@
-docker compose exec -it swaggerui curl http://api:8080/v1/healthcheck -H 'accept: application/json'
-
+docker compose exec -it swaggerui curl http://host.docker.internal:3000/healthcheck -H 'accept: application/json'
