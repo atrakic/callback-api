@@ -3,6 +3,9 @@ info:
   title: Callback API
   version: 1.0.0-SNAPSHOT
   description: Demo spec for documenting openapi functionality
+servers:
+- url: "http://api:5000/v1"
+- url: "https://api.atrakic.dev/v1"
 paths:
   /healthcheck:
     get:
@@ -20,7 +23,7 @@ paths:
                   status:
                     type: string
                     example: "OK"
-  /v1/callbacks:
+  /callbacks:
     post:
       description: subscribes a client to receive out-of-band data
       parameters:
