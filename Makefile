@@ -1,8 +1,11 @@
-
-OPTIONS ?= --build --remove-orphans --force-recreate
+OPTIONS ?= --no-color --remove-orphans --build --force-recreate
 
 all:
-	docker-compose up $(OPTIONS) -d
+	DOCKER_BUILDKIT=1 docker-compose up $(OPTIONS) -d
+
+%:
+	docker-compose up $(OPTIONS) $@ --exit-code-from postman
+	docker-compose ps -a
 
 generator:
 	[ -f ./scripts/$@.sh ] && bash ./scripts/$@.sh

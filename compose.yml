@@ -1,17 +1,21 @@
 services:
-  mock:
-    image: stoplight/prism:4
-    container_name: mock
-    command: mock -h 0.0.0.0 /tmp/openapi.yaml
-    #command: proxy -v debug -h 0.0.0.0 /tmp/openapi.yaml http://localhost:3000/ --errors
+  postman:
+    image: postman/newman:alpine
+    container_name: postman
+    #command: run https://www.getpostman.com/collections/8a0c9bc08f062d12dcda
+    command: run sample-collection.json
     volumes:
-      - ${PWD}/openapi.yaml:/tmp/openapi.yaml
-    ports:
-      # Serve the mocked API locally as available on port 3000
-      - '3000:4010'
+      - ${PWD}/postman:/etc/newman
     depends_on:
-      builder:
+      sleep:
         condition: service_completed_successfully
+  sleep:
+    image: alpine
+    container_name: sleep
+    command: 'sleep 3 && echo done'
+    depends_on:
+      swaggerui:
+        condition: service_started
   swaggerui:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggerui
@@ -24,6 +28,18 @@ services:
     depends_on:
       mock:
         condition: service_started
+  mock:
+    image: stoplight/prism:4
+    container_name: mock
+    command: mock -h 0.0.0.0 /tmp/openapi.yaml
+    volumes:
+      - ${PWD}/openapi.yaml:/tmp/openapi.yaml
+    ports:
+      # Serve the mocked API locally as available on port 3000
+      - '3000:4010'
+    depends_on:
+      builder:
+        condition: service_completed_successfully
   builder:
     image: python:3-alpine
     container_name: builder

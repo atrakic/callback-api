@@ -1,0 +1,28 @@
+{
+  "info": {
+    "name": "Sample Postman Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "description": "A sample collection"
+  },
+  "item": [{
+    "name": "A healthcheck GET request",
+    "event": [{
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('expect response be 200', function () {",
+          "    pm.response.to.be.ok",
+          "})",
+          "pm.test('expect response be json', function () {",
+          "    pm.response.to.be.json",
+          "})"
+        ]
+      }
+    }],
+    "request": {
+      "url": "http://host.docker.internal:3000/healthcheck",
+      "method": "GET"
+    }
+  }]
+}
