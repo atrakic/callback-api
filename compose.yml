@@ -2,7 +2,6 @@ services:
   postman:
     image: postman/newman:alpine
     container_name: postman
-    #command: run https://www.getpostman.com/collections/8a0c9bc08f062d12dcda
     command: run sample-collection.json
     volumes:
       - ${PWD}/postman:/etc/newman
@@ -35,7 +34,6 @@ services:
     volumes:
       - ${PWD}/openapi.yaml:/tmp/openapi.yaml
     ports:
-      # Serve the mocked API locally as available on port 3000
       - '3000:4010'
     depends_on:
       builder:
