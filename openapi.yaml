@@ -1,11 +1,10 @@
 openapi: 3.0.1
 info:
-  title: Callback API
+  title: Prototype API
   version: 1.0.0-SNAPSHOT
-  description: Demo spec for documenting openapi functionality
 servers:
   - url: "http://localhost:3000"
-  - url: "https://api.atrakic.dev"
+  - url: "https://api.demo.xip"
 paths:
   /healthcheck:
     get:

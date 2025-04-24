@@ -49,7 +49,6 @@ services:
       - shared-data:/shared-data
     command: >
       /bin/sh -c "pip install -r requirements.txt &&
-        python3 ./scripts/build.py -f ./openapi.yaml &&
-        mv -f openapi.json /shared-data"
+        python3 ./scripts/build.py --action convert -f ./openapi.yaml -o /shared-data/openapi.json"
 volumes:
   shared-data:

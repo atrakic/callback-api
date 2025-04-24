@@ -28,18 +28,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install Dependencies
+        run: pip install -r ./requirements.txt
 
       - name: Build the site
         run: |
           mkdir -p _site
-          python3 ./scripts/gen_swagger_ui.py \
-            -u https://raw.githubusercontent.com/atrakic/callbacks/refs/heads/main/openapi.yaml \
+          python3 ./scripts/build.py \
+            --action genswaggerui \
+            -u https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main/openapi.yaml \
             -o ./_site/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site/
+  
   deploy:
     environment:
       name: github-pages
