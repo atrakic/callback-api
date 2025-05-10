@@ -50,5 +50,14 @@ services:
     command: >
       /bin/sh -c "pip install -r requirements.txt &&
         python3 ./scripts/build.py --action convert -f ./openapi.yaml -o /shared-data/openapi.json"
+    depends_on:
+      validate:
+        condition: service_completed_successfully
+  validate:
+    image: openapitools/openapi-generator-cli
+    container_name: validate
+    command: validate -i /tmp/openapi.yaml
+    volumes:
+      - ${PWD}/openapi.yaml:/tmp/openapi.yaml
 volumes:
   shared-data:

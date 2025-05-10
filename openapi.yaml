@@ -4,7 +4,6 @@ info:
   version: 1.0.0-SNAPSHOT
 servers:
   - url: "http://localhost:3000"
-  - url: "https://api.demo.xip"
 paths:
   /healthcheck:
     get:
