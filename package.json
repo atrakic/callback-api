@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "newman": "^6.2.1",
     "openapi-to-postmanv2": "^5.0.0"
   }
 }
