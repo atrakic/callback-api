@@ -1,8 +1,6 @@
 name: docker-compose CI
 
 on:
-  pull_request:
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -12,4 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the stack
-        run: DOCKER_BUILDKIT=1 docker compose up --quiet-pull --no-color --exit-code-from postman
+        run: |
+          DOCKER_BUILDKIT=1 docker compose up --quiet-pull --no-color -d
+      
+      - name: get logs
+        run: |
+          docker logs postman
+
+      - name: Tear Down Docker Setup
+        run: |
+          docker compose down

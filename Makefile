@@ -1,10 +1,14 @@
+MAKEFLAGS += --silent
+
 OPTIONS ?= --no-color --remove-orphans --build --force-recreate
+
+.PHONY: all test clean
 
 all:
 	DOCKER_BUILDKIT=1 docker-compose up $(OPTIONS) -d
 
 %:
-	docker-compose up $(OPTIONS) $@ --exit-code-from postman
+	docker-compose up $(OPTIONS) $@ -d # --exit-code-from postman
 	docker-compose ps -a
 
 generator:
