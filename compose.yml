@@ -1,25 +1,9 @@
 services:
-  postman:
-    image: postman/newman:alpine
-    container_name: postman
-    command: run sample-collection.json
-    volumes:
-      - ${PWD}/postman:/etc/newman
-    depends_on:
-      sleep:
-        condition: service_completed_successfully
-  sleep:
-    image: alpine
-    container_name: sleep
-    command: 'sleep 3 && echo done'
-    depends_on:
-      swaggerui:
-        condition: service_started
   swaggerui:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggerui
     environment:
-      - SWAGGER_JSON=/appdata/openapi.json
+      - SWAGGER_JSON=/appdata/swagger.json
     ports:
       - 8080:8080
     volumes:
@@ -49,7 +33,7 @@ services:
       - shared-data:/shared-data
     command: >
       /bin/sh -c "pip install -r requirements.txt &&
-        python3 ./scripts/build.py --action convert -f ./openapi.yaml -o /shared-data/openapi.json"
+        python3 ./scripts/build.py --action convert -f ./openapi/callbacks.yaml -o /shared-data/swagger.json"
     depends_on:
       validate:
         condition: service_completed_successfully
@@ -58,6 +42,22 @@ services:
     container_name: validate
     command: validate -i /tmp/openapi.yaml
     volumes:
-      - ${PWD}/openapi.yaml:/tmp/openapi.yaml
+      - ${PWD}/openapi/callbacks.yaml:/tmp/openapi.yaml
+  postman:
+    image: postman/newman:alpine
+    container_name: postman
+    command: run sample-collection.json
+    volumes:
+      - ${PWD}/postman:/etc/newman
+    depends_on:
+      sleep:
+        condition: service_completed_successfully
+  sleep:
+    image: alpine
+    container_name: sleep
+    command: 'sleep 3 && echo done'
+    depends_on:
+      swaggerui:
+        condition: service_started
 volumes:
   shared-data:
